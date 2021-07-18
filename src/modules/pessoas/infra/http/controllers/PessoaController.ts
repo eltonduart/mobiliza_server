@@ -11,9 +11,9 @@ import AppError from '@shared/errors/AppError';
 
 export default class PessoasController {
   async index(request: Request, response: Response): Promise<Response> {
-    const { query } = request;
+    const { query, user } = request;
     const listPessoas = container.resolve(ListPessoasService);
-    const pessoas = await listPessoas.execute(query);
+    const pessoas = await listPessoas.execute(query, user.id);
 
     return response.json(classToClass(pessoas));
   }

@@ -1,9 +1,12 @@
+import Municipio from '@modules/municipios/infra/typeorm/entities/Municipio';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
   // ManyToOne,
   // JoinColumn,
 } from 'typeorm';
@@ -66,15 +69,12 @@ class Pessoa {
   @Column()
   municipio_id: number;
 
+  @ManyToOne(() => Municipio, municipio => municipio.id, { eager: true })
+  @JoinColumn({ name: 'municipio_id' })
+  municipio: Municipio;
+
   @Column()
-  owner_user_id: number;
-
-  /* @Column()
-  street_id: number;
-
-  @ManyToOne(() => Street, street => street.id, { eager: true })
-  @JoinColumn({ name: 'street_id' })
-  street: Street; */
+  owner_user_id: string;
 
   @CreateDateColumn()
   created_at: Date;

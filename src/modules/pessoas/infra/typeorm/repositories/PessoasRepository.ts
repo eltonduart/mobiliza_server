@@ -18,15 +18,41 @@ class PessoasRepository implements IPessoasRepository {
     return pessoa;
   }
 
-  public async findAll(query: any): Promise<Pessoa[]> {
+  public async findByField(
+    field: string,
+    value: any,
+  ): Promise<Pessoa | undefined> {
+    const pessoa = await this.ormRepository.findOne({ [field]: value });
+
+    return pessoa;
+  }
+
+  public async findAll(query: any, owner_user_id?: string): Promise<Pessoa[]> {
+    let sqlQuery = `Pessoa.nome ILIKE '%${query?.default || ''}%' `;
+    if (owner_user_id) {
+      sqlQuery += `and Pessoa.owner_user_id ='${owner_user_id}'`;
+    }
+
     const pessoas = await this.ormRepository.find(
       query && {
-        where: `Pessoa.nome ILIKE '%${query?.default || ''}%'`,
+        // eslint-disable-next-line prettier/prettier
+        where: sqlQuery,
         order: {
           nome: 'ASC',
         },
       },
     );
+
+    return pessoas || [];
+  }
+
+  public async findByOwner(owner_user_id: string): Promise<Pessoa[]> {
+    const pessoas = await this.ormRepository.find({
+      where: `Pessoa.owner_user_id ='${owner_user_id}'`,
+      order: {
+        nome: 'ASC',
+      },
+    });
 
     return pessoas || [];
   }

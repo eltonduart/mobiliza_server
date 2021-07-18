@@ -15,7 +15,7 @@ class CreatePessoaService {
     private usersRepository: IUsersRepository,
     @inject('HashProvider')
     private hashProvider: IHashProvider,
-  ) {}
+  ) { }
 
   public async execute(data: ICreatePessoaDTO): Promise<Pessoa> {
     const updatedData = { ...data };
@@ -27,13 +27,16 @@ class CreatePessoaService {
       throw new AppError('Pessoa already exists.');
     }
 
+
     delete updatedData.password;
-    delete updatedData.owner_user_id;
     delete updatedData.email;
 
     const pessoa = await this.pessoasRepository.create(updatedData);
 
-    if (data.tipo_usuario && ['1', '2'].includes(data.tipo_usuario as any)) {
+    if (
+      data.tipo_usuario &&
+      ['1', '2', '3'].includes(data.tipo_usuario as any)
+    ) {
       if (data.email && data.password) {
         const hashedPassword = await this.hashProvider.genereteHash(
           data.password,
@@ -42,7 +45,7 @@ class CreatePessoaService {
           email: data.email,
           name: data.nome,
           password: hashedPassword,
-          blocked: true,
+          blocked: false,
           pessoa_id: pessoa.id,
         });
       }
