@@ -1,4 +1,5 @@
 import Municipio from '@modules/municipios/infra/typeorm/entities/Municipio';
+import Distrito from '@modules/distritos/infra/typeorm/entities/Distrito';
 import {
   Entity,
   Column,
@@ -26,6 +27,9 @@ class Pessoa {
 
   @Column()
   endereco: string;
+
+  @Column()
+  bairro: string;
 
   @Column()
   telefone: string;
@@ -69,9 +73,16 @@ class Pessoa {
   @Column()
   municipio_id: number;
 
+  @Column()
+  distrito_id: number;
+
   @ManyToOne(() => Municipio, municipio => municipio.id, { eager: true })
   @JoinColumn({ name: 'municipio_id' })
   municipio: Municipio;
+
+  @ManyToOne(() => Distrito, distrito => distrito.id, { eager: true })
+  @JoinColumn({ name: 'distrito_id' })
+  distrito: Distrito;
 
   @Column()
   owner_user_id: string;

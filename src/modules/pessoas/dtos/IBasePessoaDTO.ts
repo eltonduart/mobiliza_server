@@ -3,6 +3,7 @@ export default interface IBasePessoaDTO {
   nome?: string;
   apelido?: string;
   endereco?: string;
+  bairro?: string;
   telefone?: string;
   dta_nascimento?: Date;
   whatsapp?: string;
@@ -17,6 +18,7 @@ export default interface IBasePessoaDTO {
   tipo_usuario?: string;
   status?: string;
   municipio_id?: number;
+  distrito_id?: number;
   created_at?: Date;
   updated_at?: Date;
 }

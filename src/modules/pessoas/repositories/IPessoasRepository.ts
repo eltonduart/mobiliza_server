@@ -11,4 +11,5 @@ export default interface IPessoasRepository {
   save(pessoa: IUpdatePessoaDTO): Promise<Pessoa>;
   remove(id: number): Promise<void>;
   findByOwner(owner_user_id: string): Promise<Pessoa[]>;
+  pessoa_usuario(id_user: string): Promise<any>;
 }

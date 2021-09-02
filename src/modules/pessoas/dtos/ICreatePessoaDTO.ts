@@ -4,6 +4,7 @@ export default interface ICreatePessoaDTO extends IBasePessoaDTO {
   nome: string;
   endereco: string;
   municipio_id: number;
+  distrito_id: number;
   dta_nascimento?: Date;
   owner_user_id?: number;
   email?: string;

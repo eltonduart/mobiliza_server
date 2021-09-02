@@ -15,6 +15,12 @@ import IPessoasRepository from '@modules/pessoas/repositories/IPessoasRepository
 import MunicipiosRepository from '@modules/municipios/infra/typeorm/repositories/MunicipiosRepository';
 import IMunicipiosRepository from '@modules/municipios/repositories/IMunicipioRepository';
 
+import DistritosRepository from '@modules/distritos/infra/typeorm/repositories/DistritosRepository';
+import IDistritosRepository from '@modules/distritos/repositories/IDistritoRepository';
+
+import OcorrenciasRepository from '@modules/ocorrencias/infra/typeorm/repositories/OcorrenciasRepository';
+import IOcorrenciasRepository from '@modules/ocorrencias/repositories/IOcorrenciaRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -31,4 +37,12 @@ container.registerSingleton<IPessoasRepository>(
 container.registerSingleton<IMunicipiosRepository>(
   'MunicipiosRepository',
   MunicipiosRepository,
+);
+container.registerSingleton<IDistritosRepository>(
+  'DistritosRepository',
+  DistritosRepository,
+);
+container.registerSingleton<IOcorrenciasRepository>(
+  'OcorrenciasRepository',
+  OcorrenciasRepository,
 );

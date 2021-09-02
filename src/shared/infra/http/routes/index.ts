@@ -6,6 +6,8 @@ import ensureAuthenticated from '@modules/users/infra/http/routes/middlewares/en
 import profileRouter from '@modules/users/infra/http/routes/profiles.routes';
 import pessoasRouter from '@modules/pessoas/infra/http/routes/pessoas.routes';
 import municipiosRouter from '@modules/municipios/infra/http/routes/municipios.routes';
+import distritosRouter from '@modules/distritos/infra/http/routes/distritos.routes';
+import ocorrenciasRouter from '@modules/ocorrencias/infra/http/routes/ocorrencias.routes';
 
 const routes = Router();
 
@@ -16,5 +18,7 @@ routes.use(ensureAuthenticated);
 routes.use('/profile', profileRouter);
 routes.use('/pessoas', pessoasRouter);
 routes.use('/municipios', municipiosRouter);
+routes.use('/distritos', distritosRouter);
+routes.use('/ocorrencias', ocorrenciasRouter);
 
 export default routes;

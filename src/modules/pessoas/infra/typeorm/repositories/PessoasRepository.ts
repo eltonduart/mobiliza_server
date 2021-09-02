@@ -1,9 +1,10 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, getConnection } from 'typeorm';
 
 import Pessoa from '@modules/pessoas/infra/typeorm/entities/Pessoa';
 import IPessoasRepository from '@modules/pessoas/repositories/IPessoasRepository';
 import ICreatePessoaDTO from '@modules/pessoas/dtos/ICreatePessoaDTO';
 import IUpdatePessoaDTO from '@modules/pessoas/dtos/IUpdatePessoaDTO';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 class PessoasRepository implements IPessoasRepository {
   private ormRepository: Repository<Pessoa>;
@@ -57,14 +58,6 @@ class PessoasRepository implements IPessoasRepository {
     return pessoas || [];
   }
 
-  public async create(pessoaData: ICreatePessoaDTO): Promise<Pessoa> {
-    const pessoa = this.ormRepository.create(pessoaData);
-
-    await this.ormRepository.save(pessoa);
-
-    return pessoa;
-  }
-
   public async findById(id: number): Promise<Pessoa | undefined> {
     const findEntity = await this.ormRepository.findOne({
       where: { id },
@@ -73,12 +66,37 @@ class PessoasRepository implements IPessoasRepository {
     return findEntity || undefined;
   }
 
+  public async create(pessoaData: ICreatePessoaDTO): Promise<Pessoa> {
+    const pessoa = this.ormRepository.create(pessoaData);
+
+    await this.ormRepository.save(pessoa);
+
+    const newpessoa = await this.findById(pessoa.id);
+
+    return newpessoa || pessoa;
+  }
+
   public async save(pessoa: IUpdatePessoaDTO): Promise<Pessoa> {
-    return this.ormRepository.save(pessoa);
+    const result = await this.ormRepository.save(pessoa);
+
+    const updpessoa = await this.findById(result.id);
+
+    return updpessoa || result;
   }
 
   public async remove(id: number): Promise<void> {
     this.ormRepository.delete(id);
+  }
+
+  public async pessoa_usuario(): Promise<any> {
+    const resp = await getConnection()
+      .createQueryBuilder()
+      .select('pessoa_user.nome')
+      .from(Pessoa, 'pessoas')
+      .leftJoin(User, 'users', 'users.id::varchar = "pessoas".owner_user_id')
+      .innerJoin(Pessoa, 'pessoa_user', 'pessoa_user.id = "users".pessoa_id')
+      .execute();
+    return resp;
   }
 }
 
